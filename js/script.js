@@ -6,13 +6,9 @@ let todoControl = document.querySelector('.todo-control'),
 	todoCompleted = document.querySelector('.todo-completed');
 
 const todoData = [];
-if(localStorage.getItem('todoSave')){
+if(localStorage.getItem('todoSave') || localStorage == []){
 	saveToDo();
 }
-
-console.log(todoData)
-console.log(typeof todoData)
-
 
 const render = function() {
 
@@ -37,49 +33,47 @@ const render = function() {
 			todoList.append(li);
 		}
 
-		const btnRemove = li.querySelector('.todo-remove');
-		btnRemove.addEventListener('click', function(){
-			if(confirm("Удалить задачу?")){
-				// li.parentNode.remove();
-			
-				todoData.forEach(function(item){
-					console.log(indexOf(item))
-				});
-			}
-			console.log('УДАЛИЛ')
-		});
-		console.log(btnRemove)
-
 	const btnTodoCompleted = li.querySelector('.todo-complete');
 	btnTodoCompleted.addEventListener('click', function(){
 	item.completed = !item.completed;
-
-
-
-
-	
-
-	/*const btnRemove = li.querySelector('.todo-remove');
-	btnRemove.addEventListener('click', function(){
-		console.log(btnRemove + ' Удалить')
-	});*/
-
-
-/*
-		localStorage.setItem('saveBool', saveBtnCompleted);
-		let getBtnCompleted = localStorage.getItem('saveBool');
-		console.log(getBtnCompleted)*/
-		// newTodo.completed.push(getBtnCompleted);
-		// console.log(getBtnCompleted)
-		// console.log(newTodo)
-
-
-
 		render();
 	});	
 
+
+
+
+
+	const btnRemove = li.querySelector('.todo-remove')
+	btnRemove.setAttribute('data-action', 'delete');
+
+	btnRemove.addEventListener('click', function(e){
+		if(true){
+			let target = e.target.closest("li").remove();
+			var textValue = e.target.parentNode.firstChild.textContent;
+			var arrIndex = todoData.findIndex(function(item){
+				textValue;
+			});
+			todoData.splice(arrIndex, 1);
+			localStorage.setItem("todoSave", JSON.stringify(todoData));
+
+		}
+		// var arrIndex = todoData.indexOf(1);
+console.log(arrIndex)
+		// console.log(arrIndex)
+
+		
 	});
+});
 }
+
+
+
+
+
+
+
+
+
 
 function saveToDo(){
 	const storageSave = localStorage.getItem("todoSave");
@@ -87,9 +81,22 @@ function saveToDo(){
   const storageSaveJSON = JSON.parse(storageSave);
   	storageSaveJSON.map(function(item){
   			todoData.push(item);
-  			console.log(item)
   	});
 }
+
+/*function removeItem(e) {
+    if (
+        e.target.hasAttribute("data-action") &&
+        e.target.getAttribute("data-action") == "delete"
+    ) {
+        if (confirm("Удалить задачу?")) {
+            e.target.parentNode.remove();
+        }
+    }
+
+   saveToDo();
+}*/
+
 
 /*
 let removeLine = addEventListener('click', function(){
