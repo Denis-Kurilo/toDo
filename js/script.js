@@ -10,6 +10,11 @@ if(localStorage.getItem('todoSave') || localStorage == []){
 	saveToDo();
 }
 
+function updateList(){
+    localStorage.removeItem("todoSave")
+    localStorage.setItem("todoSave",JSON.stringify(todoData))
+}
+
 const render = function() {
 
 	todoList.textContent = '';
@@ -38,72 +43,30 @@ const render = function() {
 	item.completed = !item.completed;
 		render();
 	});	
-
-
-
-
-
+	updateList()
+	
 	const btnRemove = li.querySelector('.todo-remove')
-	btnRemove.setAttribute('data-action', 'delete');
-
 	btnRemove.addEventListener('click', function(e){
-		if(true){
-			let target = e.target.closest("li").remove();
-			var textValue = e.target.parentNode.firstChild.textContent;
-			var arrIndex = todoData.findIndex(function(item){
-				textValue;
-			});
-			todoData.splice(arrIndex, 1);
-			localStorage.setItem("todoSave", JSON.stringify(todoData));
-
-		}
-		// var arrIndex = todoData.indexOf(1);
-console.log(arrIndex)
-		// console.log(arrIndex)
-
-		
+    let taskDelete = e.target.closest("li").firstChild
+        if (confirm('Удалить задачу?')){
+        e.target.closest("li").remove();
+        
+        let itemIndex = todoData.indexOf(taskDelete)
+        todoData.splice(itemIndex, 1)
+        localStorage.setItem("todoSave", JSON.stringify(todoData));
+        }    
 	});
 });
 }
-
-
-
-
-
-
-
-
-
 
 function saveToDo(){
 	const storageSave = localStorage.getItem("todoSave");
 
   const storageSaveJSON = JSON.parse(storageSave);
-  	storageSaveJSON.map(function(item){
+  	storageSaveJSON.forEach(function(item){
   			todoData.push(item);
   	});
 }
-
-/*function removeItem(e) {
-    if (
-        e.target.hasAttribute("data-action") &&
-        e.target.getAttribute("data-action") == "delete"
-    ) {
-        if (confirm("Удалить задачу?")) {
-            e.target.parentNode.remove();
-        }
-    }
-
-   saveToDo();
-}*/
-
-
-/*
-let removeLine = addEventListener('click', function(){
-	
-});*/
-
-
 
 todoControl.addEventListener('submit', function(event){
 	event.preventDefault();
@@ -111,8 +74,6 @@ todoControl.addEventListener('submit', function(event){
 		value: headerInput.value,
 		completed: false
 	};
-
-	// newTodo.completed=localStorage.getItem('saveBool');
 
 	if(headerInput.value === ''){
 		return;
